@@ -1,0 +1,31 @@
+[package]
+name = "mem0-rs"
+version = "0.1.0"
+edition = "2021"
+description = "Long-term memory for AI Agents - Rust implementation"
+license = "Apache-2.0"
+
+[dependencies]
+tokio = { version = "1.40", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+async-trait = "0.1"
+thiserror = "1.0"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+qdrant-client = "1.10"
+reqwest = { version = "0.12", features = ["json"] }
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+sha2 = "0.10"
+hex = "0.4"
+anyrepair = "0.1"
+
+[dev-dependencies]
+insta = { version = "1.40", features = ["json"] }
+tokio-test = "0.4"
+
+[profile.release]
+opt-level = 3
+lto = true

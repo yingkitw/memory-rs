@@ -1,0 +1,50 @@
+# Rust
+/target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+
+# Dependencies
+node_modules/
+dist/
+
+# Test coverage
+*.profraw
+*.profdata
+/coverage/
+
+# Misc
+.cache/
+.pytest_cache/
+__pycache__/
