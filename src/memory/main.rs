@@ -7,7 +7,6 @@ use std::sync::Arc;
 use crate::config::MemoryConfig;
 use crate::Result;
 use crate::vector_store::VectorStoreBase;
-use crate::llm::LlmBase;
 use crate::embeddings::EmbedderBase;
 
 use super::{MemoryBase, MemoryItem, SearchResultItem};
@@ -16,7 +15,6 @@ use super::{MemoryBase, MemoryItem, SearchResultItem};
 pub struct Memory {
     config: MemoryConfig,
     vector_store: Arc<dyn VectorStoreBase>,
-    llm: Arc<dyn LlmBase>,
     embedder: Arc<dyn EmbedderBase>,
 }
 
@@ -25,13 +23,11 @@ impl Memory {
     pub fn new(
         config: MemoryConfig,
         vector_store: Arc<dyn VectorStoreBase>,
-        llm: Arc<dyn LlmBase>,
         embedder: Arc<dyn EmbedderBase>,
     ) -> Self {
         Self {
             config,
             vector_store,
-            llm,
             embedder,
         }
     }
@@ -178,31 +174,25 @@ impl MemoryBase for Memory {
 mod tests {
     use super::*;
     use crate::embeddings::EmbedderBase;
-    use crate::llm::LlmBase;
 
     #[test]
     fn test_collection_name() {
-        let config = MemoryConfig::new(
-            "http://localhost:6334".to_string(),
-            "test-key".to_string(),
-        );
+        let config = MemoryConfig::new("memory.db".to_string());
 
         let memory = Memory::new(
             config,
             Arc::new(MockVectorStore),
-            Arc::new(MockLLM),
             Arc::new(MockEmbedder),
         );
 
         assert_eq!(
             memory.get_collection_name("user_123"),
-            "mem0_user_123"
+            "memory_user_123"
         );
     }
 
     // Mock implementations for testing
     struct MockVectorStore;
-    struct MockLLM;
     struct MockEmbedder;
 
     #[async_trait]
@@ -251,29 +241,6 @@ mod tests {
 
         async fn count(&self, _collection_name: &str) -> crate::Result<usize> {
             Ok(0)
-        }
-    }
-
-    #[async_trait]
-    impl LlmBase for MockLLM {
-        async fn generate(
-            &self,
-            _prompt: &str,
-            _params: Option<crate::llm::GenerationParams>,
-        ) -> crate::Result<String> {
-            Ok("Generated text".to_string())
-        }
-
-        async fn generate_stream(
-            &self,
-            _prompt: &str,
-            _params: Option<crate::llm::GenerationParams>,
-        ) -> crate::Result<String> {
-            Ok("Generated text".to_string())
-        }
-
-        fn model_name(&self) -> &str {
-            "mock-model"
         }
     }
 

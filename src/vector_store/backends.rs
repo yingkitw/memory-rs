@@ -8,10 +8,6 @@ use super::{VectorMetadata, SearchResult};
 pub enum BackendType {
     /// Qdrant backend
     Qdrant,
-    /// Pinecone backend
-    Pinecone,
-    /// Weaviate backend
-    Weaviate,
     /// Milvus backend
     Milvus,
     /// PostgreSQL/pgvector backend
@@ -23,8 +19,6 @@ impl BackendType {
     pub fn name(&self) -> &'static str {
         match self {
             Self::Qdrant => "qdrant",
-            Self::Pinecone => "pinecone",
-            Self::Weaviate => "weaviate",
             Self::Milvus => "milvus",
             Self::PostgreSQL => "postgresql",
         }
@@ -34,8 +28,6 @@ impl BackendType {
     pub fn description(&self) -> &'static str {
         match self {
             Self::Qdrant => "Open-source vector database",
-            Self::Pinecone => "Managed vector database",
-            Self::Weaviate => "Open-source vector search engine",
             Self::Milvus => "Open-source vector database",
             Self::PostgreSQL => "PostgreSQL with pgvector extension",
         }
@@ -91,26 +83,25 @@ mod tests {
     #[test]
     fn test_backend_type_names() {
         assert_eq!(BackendType::Qdrant.name(), "qdrant");
-        assert_eq!(BackendType::Pinecone.name(), "pinecone");
-        assert_eq!(BackendType::Weaviate.name(), "weaviate");
         assert_eq!(BackendType::Milvus.name(), "milvus");
         assert_eq!(BackendType::PostgreSQL.name(), "postgresql");
     }
 
     #[test]
     fn test_backend_config() {
-        let config = BackendConfig::new(BackendType::Pinecone, "https://api.pinecone.io".to_string())
+        let config = BackendConfig::new(BackendType::Qdrant, "http://localhost:6334".to_string())
             .with_api_key("test-key".to_string())
-            .with_config("dimension".to_string(), "1536".to_string());
+            .with_config("dimension".to_string(), "384".to_string());
 
-        assert_eq!(config.backend_type, BackendType::Pinecone);
+        assert_eq!(config.backend_type, BackendType::Qdrant);
         assert_eq!(config.api_key, Some("test-key".to_string()));
-        assert_eq!(config.get_config("dimension"), Some("1536"));
+        assert_eq!(config.get_config("dimension"), Some("384"));
     }
 
     #[test]
     fn test_backend_descriptions() {
         assert!(!BackendType::Qdrant.description().is_empty());
-        assert!(!BackendType::Pinecone.description().is_empty());
+        assert!(!BackendType::Milvus.description().is_empty());
+        assert!(!BackendType::PostgreSQL.description().is_empty());
     }
 }

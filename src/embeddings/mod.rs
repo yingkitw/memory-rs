@@ -5,9 +5,11 @@ use crate::Result;
 
 pub mod default;
 pub mod cache;
+pub mod local;
 
 pub use default::DefaultEmbedder;
 pub use cache::EmbeddingCache;
+pub use local::LocalEmbedder;
 
 /// Base trait for embedding implementations
 #[async_trait]

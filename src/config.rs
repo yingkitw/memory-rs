@@ -1,17 +1,17 @@
-//! Configuration types for mem0-rs
+//! Configuration types for memory-rs
 
 use serde::{Deserialize, Serialize};
 
 /// Memory configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MemoryConfig {
-    /// Qdrant vector store URL
-    pub vector_store_url: String,
+    /// Database path (SQLite)
+    pub db_path: String,
 
-    /// Watsonx API key
-    pub watsonx_api_key: String,
+    /// Watsonx API key (optional)
+    pub watsonx_api_key: Option<String>,
 
-    /// Watsonx project ID
+    /// Watsonx project ID (optional)
     pub watsonx_project_id: Option<String>,
 
     /// LLM model name (default: ibm/granite-4-h-small)
@@ -34,19 +34,26 @@ pub struct MemoryConfig {
 }
 
 impl MemoryConfig {
-    /// Create a new memory configuration
-    pub fn new(vector_store_url: String, watsonx_api_key: String) -> Self {
+    /// Create a new memory configuration with SQLite database
+    pub fn new(db_path: String) -> Self {
         Self {
-            vector_store_url,
-            watsonx_api_key,
+            db_path,
+            watsonx_api_key: None,
             watsonx_project_id: None,
-            llm_model: Some("ibm/granite-4-h-small".to_string()),
+            llm_model: None,
             embedding_model: None,
             vector_dimension: Some(384),
-            collection_prefix: Some("mem0".to_string()),
-            enable_telemetry: Some(true),
+            collection_prefix: Some("memory".to_string()),
+            enable_telemetry: Some(false),
             batch_size: Some(32),
         }
+    }
+
+    /// Create with Watsonx API key
+    pub fn with_watsonx(mut self, api_key: String, project_id: String) -> Self {
+        self.watsonx_api_key = Some(api_key);
+        self.watsonx_project_id = Some(project_id);
+        self
     }
 
     /// Set Watsonx project ID
@@ -107,7 +114,7 @@ impl MemoryConfig {
     pub fn get_collection_prefix(&self) -> String {
         self.collection_prefix
             .clone()
-            .unwrap_or_else(|| "mem0".to_string())
+            .unwrap_or_else(|| "memory".to_string())
     }
 
     /// Check if telemetry is enabled
@@ -127,30 +134,32 @@ mod tests {
 
     #[test]
     fn test_config_defaults() {
-        let config = MemoryConfig::new(
-            "http://localhost:6334".to_string(),
-            "test-key".to_string(),
-        );
+        let config = MemoryConfig::new("memory.db".to_string());
 
-        assert_eq!(config.get_llm_model(), "ibm/granite-4-h-small");
         assert_eq!(config.get_vector_dimension(), 384);
-        assert_eq!(config.get_collection_prefix(), "mem0");
-        assert!(config.is_telemetry_enabled());
+        assert_eq!(config.get_collection_prefix(), "memory");
+        assert!(!config.is_telemetry_enabled());
         assert_eq!(config.get_batch_size(), 32);
     }
 
     #[test]
     fn test_config_builder() {
-        let config = MemoryConfig::new(
-            "http://localhost:6334".to_string(),
-            "test-key".to_string(),
-        )
-        .with_vector_dimension(768)
-        .with_collection_prefix("custom".to_string())
-        .with_telemetry(false);
+        let config = MemoryConfig::new("memory.db".to_string())
+            .with_vector_dimension(768)
+            .with_collection_prefix("custom".to_string())
+            .with_telemetry(true);
 
         assert_eq!(config.get_vector_dimension(), 768);
         assert_eq!(config.get_collection_prefix(), "custom");
-        assert!(!config.is_telemetry_enabled());
+        assert!(config.is_telemetry_enabled());
+    }
+
+    #[test]
+    fn test_config_with_watsonx() {
+        let config = MemoryConfig::new("memory.db".to_string())
+            .with_watsonx("api-key".to_string(), "project-id".to_string());
+
+        assert_eq!(config.watsonx_api_key, Some("api-key".to_string()));
+        assert_eq!(config.watsonx_project_id, Some("project-id".to_string()));
     }
 }

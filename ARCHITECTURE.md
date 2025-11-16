@@ -1,13 +1,14 @@
-# mem0-rs Architecture
+# memory-rs Architecture
 
 ## Overview
 
-mem0-rs is a Rust implementation of the Mem0 memory layer for AI agents. It provides:
+memory-rs is a Rust implementation of long-term memory for AI agents. It provides:
 
 1. **Memory Management**: Store and retrieve user/agent memories
-2. **Vector Search**: Semantic search using Qdrant
-3. **LLM Integration**: Process memories with Watsonx
-4. **Async Operations**: Non-blocking I/O with Tokio
+2. **Vector Search**: Semantic search using in-memory vector store
+3. **Local Embeddings**: SHA256-based hash embeddings
+4. **Persistent Storage**: SQLite database for metadata
+5. **Async Operations**: Non-blocking I/O with Tokio
 
 ## Core Components
 
@@ -32,37 +33,27 @@ mem0-rs is a Rust implementation of the Mem0 memory layer for AI agents. It prov
 - `search()` - Semantic search
 - `delete()` - Remove vectors
 
-**QdrantStore**: Qdrant implementation
-- Uses Qdrant client for vector operations
+**InMemoryStore**: In-memory implementation
+- Stores vectors in memory with RwLock for thread-safety
 - Manages collections per user/agent
-- Handles vector embeddings
-
-### LLM Module (`src/llm/`)
-
-**LlmBase Trait**: Abstract LLM interface
-- `generate()` - Generate text
-- `generate_stream()` - Stream generation
-
-**WatsonxLLM**: Watsonx implementation
-- Uses watsonx-rs SDK
-- Supports streaming responses
-- Configurable model selection
+- Implements cosine similarity search
 
 ### Embeddings Module (`src/embeddings/`)
 
 **EmbedderBase Trait**: Abstract embedder interface
 - `embed()` - Generate embeddings
 
-**DefaultEmbedder**: Default implementation
-- Uses Watsonx for embeddings
-- Caches embeddings
+**LocalEmbedder**: Local implementation
+- Uses SHA256-based hashing
+- No external dependencies
+- Deterministic embeddings
+- Default embedder
 
 ## Data Flow
 
 1. **Add Memory**:
    - User provides text
-   - LLM extracts facts/insights
-   - Generate embeddings
+   - Generate embeddings (local)
    - Store in vector database with metadata
 
 2. **Search Memory**:
@@ -73,8 +64,7 @@ mem0-rs is a Rust implementation of the Mem0 memory layer for AI agents. It prov
 
 3. **Update Memory**:
    - Retrieve existing memory
-   - LLM processes update
-   - Update vector store
+   - Update vector store with new embedding
 
 ## Design Patterns
 
@@ -86,13 +76,15 @@ mem0-rs is a Rust implementation of the Mem0 memory layer for AI agents. It prov
 ## Testing Strategy
 
 - Unit tests for core logic
-- Integration tests with Qdrant
+- In-memory vector store tests
 - Snapshot tests with insta
 - Mock implementations for LLM/embeddings
 
 ## Future Enhancements
 
-- Graph-based memory relationships
-- Multiple vector store backends
+- Graph-based memory relationships (Neo4j)
+- Additional vector store backends (Milvus, PostgreSQL)
 - Advanced filtering and aggregation
 - Distributed memory management
+- CLI tools for memory inspection
+- REST/GraphQL API

@@ -6,13 +6,9 @@ use crate::Result;
 
 pub mod qdrant;
 pub mod backends;
-pub mod pinecone;
-pub mod weaviate;
 
-pub use qdrant::QdrantStore;
+pub use qdrant::InMemoryStore;
 pub use backends::{BackendType, BackendConfig};
-pub use pinecone::PineconeStore;
-pub use weaviate::WeaviateStore;
 
 /// Metadata associated with a vector
 #[derive(Debug, Clone, Serialize, Deserialize)]

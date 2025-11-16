@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>memory-rs Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .doc-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        .doc-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+        .doc-card h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .doc-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .features {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .features h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        .features ul {
+            list-style: none;
+            columns: 2;
+            gap: 2rem;
+        }
+        .features li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>memory-rs</h1>
+        <p class="subtitle">Long-term memory for AI Agents and Assistants</p>
+        
+        <div class="features">
+            <h2>Key Features</h2>
+            <ul>
+                <li>Multi-Level Memory Management</li>
+                <li>Semantic Search with Qdrant</li>
+                <li>Watsonx LLM Integration</li>
+                <li>Async-First Architecture</li>
+                <li>Type-Safe Rust Implementation</li>
+                <li>Trait-Based Extensibility</li>
+            </ul>
+        </div>
+
+        <h2 style="color: #667eea; margin-top: 2rem;">Documentation</h2>
+        <div class="docs-grid">
+            <a href="GETTING_STARTED.md" class="doc-card">
+                <h3>Getting Started</h3>
+                <p>Setup and basic usage guide to get up and running quickly</p>
+            </a>
+            <a href="ARCHITECTURE.md" class="doc-card">
+                <h3>Architecture</h3>
+                <p>Design decisions and component overview</p>
+            </a>
+            <a href="ADVANCED_FEATURES.md" class="doc-card">
+                <h3>Advanced Features</h3>
+                <p>Deduplication, batching, caching, and prompt management</p>
+            </a>
+            <a href="STORAGE_BACKENDS.md" class="doc-card">
+                <h3>Storage Backends</h3>
+                <p>Vector store backends: Qdrant, Milvus, PostgreSQL</p>
+            </a>
+            <a href="LLM_PROVIDERS.md" class="doc-card">
+                <h3>LLM Providers</h3>
+                <p>LLM integration with Watsonx</p>
+            </a>
+            <a href="FILTERING_GUIDE.md" class="doc-card">
+                <h3>Filtering Guide</h3>
+                <p>Advanced filtering and query capabilities</p>
+            </a>
+            <a href="GRAPH_MEMORY.md" class="doc-card">
+                <h3>Graph Memory</h3>
+                <p>Knowledge graph integration with Neo4j</p>
+            </a>
+            <a href="CHANGELOG.md" class="doc-card">
+                <h3>Changelog</h3>
+                <p>Version history and release notes</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
