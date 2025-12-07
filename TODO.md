@@ -83,19 +83,30 @@
 - [ ] Authentication/Authorization
 - [ ] Rate limiting
 
+## Architecture Improvements ✅ COMPLETE
+- [x] Consolidated duplicate hash computation into utils module
+- [x] Consolidated cosine similarity into utils module
+- [x] Removed unused imports
+- [x] Fixed compiler warnings
+- [x] Added get_by_id and get_all to VectorStoreBase trait
+- [x] Implemented get_all for Memory
+
 ## Known Issues
 - Streaming not fully implemented
 - Connection pooling not implemented
 - Caching is basic
+- Memory update/delete requires user_id (no global index)
 
 ## Performance Considerations
 - [ ] Vector store batch operations
-- [ ] Embedding caching (LRU)
+- [x] Embedding caching (LRU)
 - [ ] Connection pooling
 - [ ] Async parallelization
 - [ ] Memory-mapped files
 - [ ] Compression
 
 ## Documentation Needs
+- [x] README with CLI and MCP sections
+- [x] ARCHITECTURE.md updated
 - [ ] API documentation
 - [ ] Performance benchmarks
