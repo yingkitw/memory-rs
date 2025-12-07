@@ -1,7 +1,6 @@
 //! Distributed memory management
 
 use async_trait::async_trait;
-use std::collections::HashMap;
 use crate::Result;
 
 /// Node role in the cluster

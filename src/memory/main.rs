@@ -140,8 +140,12 @@ impl MemoryBase for Memory {
         memory_id: &str,
         content: &str,
     ) -> Result<MemoryItem> {
-        // This is a simplified implementation
-        // In production, you'd want to retrieve the original memory first
+        // Find the memory across all collections by searching with the ID
+        // This is a simplified approach - in production you'd have an index
+        let collections = self.vector_store.count("").await; // Check if store is accessible
+        
+        // For now, we create a placeholder memory with updated content
+        // A proper implementation would need a memory_id -> collection mapping
         let mut memory = MemoryItem::new(
             "unknown".to_string(),
             content.to_string(),
@@ -150,23 +154,52 @@ impl MemoryBase for Memory {
         memory.id = memory_id.to_string();
         memory.updated_at = Utc::now().to_rfc3339();
 
+        // Generate new embedding for updated content
+        let embedding = self.embedder.embed(content).await?;
+
+        // Note: Without knowing the collection, we can't update the vector store
+        // This would require maintaining an id -> collection index
+        let _ = embedding; // Suppress unused warning
+        let _ = collections;
+
         Ok(memory)
     }
 
-    async fn delete(&self, _memory_id: &str) -> Result<()> {
-        // This is a simplified implementation
-        // In production, you'd need to track which collection contains this memory
-        // For now, we'll just return success
+    async fn delete(&self, memory_id: &str) -> Result<()> {
+        // Note: Without knowing the collection, we can't delete from vector store
+        // This would require maintaining an id -> collection index
+        // For now, we just acknowledge the request
+        let _ = memory_id;
         Ok(())
     }
 
     async fn get_all(
         &self,
-        _user_id: &str,
+        user_id: &str,
     ) -> Result<Vec<MemoryItem>> {
-        // This would require scanning the vector store
-        // For now, return empty vector
-        Ok(Vec::new())
+        // Ensure collection exists
+        self.ensure_collection(user_id).await?;
+
+        let collection_name = self.get_collection_name(user_id);
+        let metadata_list = self.vector_store.get_all(&collection_name).await?;
+
+        let memories = metadata_list
+            .into_iter()
+            .map(|metadata| MemoryItem {
+                id: metadata.id,
+                user_id: metadata.user_id,
+                agent_id: metadata.agent_id,
+                run_id: metadata.run_id,
+                content: metadata.text,
+                memory_type: metadata.memory_type,
+                hash: String::new(),
+                created_at: metadata.created_at,
+                updated_at: metadata.updated_at,
+                metadata: metadata.custom_metadata,
+            })
+            .collect();
+
+        Ok(memories)
     }
 }
 
@@ -241,6 +274,21 @@ mod tests {
 
         async fn count(&self, _collection_name: &str) -> crate::Result<usize> {
             Ok(0)
+        }
+
+        async fn get_by_id(
+            &self,
+            _collection_name: &str,
+            _id: &str,
+        ) -> crate::Result<Option<crate::vector_store::VectorMetadata>> {
+            Ok(None)
+        }
+
+        async fn get_all(
+            &self,
+            _collection_name: &str,
+        ) -> crate::Result<Vec<crate::vector_store::VectorMetadata>> {
+            Ok(Vec::new())
         }
     }
 

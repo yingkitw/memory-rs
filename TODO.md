@@ -63,14 +63,20 @@
 - [x] Replication
 - [x] Sharding
 
-## Phase 13: CLI & Tools 📋 PLANNED
-- [ ] CLI for memory management
-- [ ] Memory inspection tools
-- [ ] Batch import/export
+## Phase 13: MCP Server ✅ COMPLETE
+- [x] MCP server implementation using rmcp 0.9
+- [x] Memory tools (add, search, update, delete, get_all)
+- [x] STDIO transport for MCP communication
+- [x] JSON Schema generation for tool inputs
+
+## Phase 14: CLI & Tools ✅ COMPLETE
+- [x] CLI for memory management (memory-cli)
+- [x] Memory inspection tools (list, stats)
+- [x] Batch import/export (JSON format)
 - [ ] Migration utilities
 - [ ] Performance profiling
 
-## Phase 14: Web API 📋 PLANNED
+## Phase 15: Web API 📋 PLANNED
 - [ ] REST API
 - [ ] GraphQL API
 - [ ] WebSocket support

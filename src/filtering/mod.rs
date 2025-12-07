@@ -1,6 +1,5 @@
 //! Advanced filtering and query DSL
 
-use std::collections::HashMap;
 use chrono::{DateTime, Utc};
 
 /// Filter operator

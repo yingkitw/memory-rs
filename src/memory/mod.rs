@@ -76,10 +76,7 @@ impl MemoryItem {
 
     /// Compute hash of content
     fn compute_hash(content: &str) -> String {
-        use sha2::{Sha256, Digest};
-        let mut hasher = Sha256::new();
-        hasher.update(content.as_bytes());
-        hex::encode(hasher.finalize())
+        crate::utils::compute_hash(content)
     }
 
     /// Set agent ID

@@ -1,8 +1,5 @@
 //! Batch operations for memory
 
-use crate::Result;
-use super::MemoryItem;
-
 /// Batch operation type
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BatchOpType {

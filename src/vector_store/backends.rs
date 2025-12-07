@@ -1,8 +1,5 @@
 //! Vector store backend implementations
 
-use crate::Result;
-use super::{VectorMetadata, SearchResult};
-
 /// Backend type enumeration
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BackendType {

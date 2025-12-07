@@ -9,6 +9,13 @@ memory-rs is a Rust implementation of long-term memory for AI agents. It provide
 3. **Local Embeddings**: SHA256-based hash embeddings
 4. **Persistent Storage**: SQLite database for metadata
 5. **Async Operations**: Non-blocking I/O with Tokio
+6. **MCP Server**: Model Context Protocol server for AI assistant integration
+7. **CLI Tools**: Command-line interface for memory management
+
+## Binaries
+
+- **memory-mcp**: MCP server for AI assistant integration (STDIO transport)
+- **memory-cli**: CLI for memory management operations
 
 ## Core Components
 
@@ -80,11 +87,22 @@ memory-rs is a Rust implementation of long-term memory for AI agents. It provide
 - Snapshot tests with insta
 - Mock implementations for LLM/embeddings
 
+### MCP Module (`src/mcp/`)
+
+**MemoryMcpServer**: MCP server implementation
+- Exposes memory operations as MCP tools
+- Uses STDIO transport for communication
+- JSON Schema generation for tool inputs
+
+### Utils Module (`src/utils/`)
+
+**Shared Utilities**:
+- `compute_hash()` - SHA256 hash computation
+- `cosine_similarity()` - Vector similarity calculation
+
 ## Future Enhancements
 
-- Graph-based memory relationships (Neo4j)
 - Additional vector store backends (Milvus, PostgreSQL)
-- Advanced filtering and aggregation
-- Distributed memory management
-- CLI tools for memory inspection
 - REST/GraphQL API
+- Migration utilities
+- Performance profiling

@@ -95,4 +95,17 @@ pub trait VectorStoreBase: Send + Sync {
 
     /// Get vector count in collection
     async fn count(&self, collection_name: &str) -> Result<usize>;
+
+    /// Get a vector by ID
+    async fn get_by_id(
+        &self,
+        collection_name: &str,
+        id: &str,
+    ) -> Result<Option<VectorMetadata>>;
+
+    /// Get all vectors in a collection
+    async fn get_all(
+        &self,
+        collection_name: &str,
+    ) -> Result<Vec<VectorMetadata>>;
 }

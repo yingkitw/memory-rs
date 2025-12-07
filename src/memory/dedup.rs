@@ -1,7 +1,8 @@
 //! Memory deduplication module
 
-use sha2::{Sha256, Digest};
 use std::collections::HashMap;
+
+use crate::utils;
 
 /// Deduplication strategy
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -18,6 +19,7 @@ pub enum DeduplicationStrategy {
 pub struct Deduplicator {
     strategy: DeduplicationStrategy,
     cache: HashMap<String, String>, // hash -> id mapping
+    #[allow(dead_code)]
     similarity_threshold: f32,
 }
 
@@ -42,9 +44,7 @@ impl Deduplicator {
 
     /// Compute hash of content
     pub fn compute_hash(content: &str) -> String {
-        let mut hasher = Sha256::new();
-        hasher.update(content.as_bytes());
-        hex::encode(hasher.finalize())
+        utils::compute_hash(content)
     }
 
     /// Check if content is duplicate
@@ -89,19 +89,7 @@ impl Deduplicator {
 
     /// Compute similarity between two vectors (cosine similarity)
     pub fn compute_similarity(vec1: &[f32], vec2: &[f32]) -> f32 {
-        if vec1.len() != vec2.len() || vec1.is_empty() {
-            return 0.0;
-        }
-
-        let dot_product: f32 = vec1.iter().zip(vec2).map(|(a, b)| a * b).sum();
-        let norm1: f32 = vec1.iter().map(|x| x * x).sum::<f32>().sqrt();
-        let norm2: f32 = vec2.iter().map(|x| x * x).sum::<f32>().sqrt();
-
-        if norm1 == 0.0 || norm2 == 0.0 {
-            return 0.0;
-        }
-
-        dot_product / (norm1 * norm2)
+        utils::cosine_similarity(vec1, vec2)
     }
 }
 

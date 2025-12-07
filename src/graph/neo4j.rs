@@ -84,7 +84,7 @@ impl Neo4jStore {
         let mut params = HashMap::new();
         params.insert("id".to_string(), serde_json::Value::String(id.to_string()));
 
-        let result = self.execute_query(query, &params).await?;
+        let _result = self.execute_query(query, &params).await?;
         
         // Parse result (placeholder)
         Ok(None)
@@ -101,7 +101,7 @@ impl Neo4jStore {
         params.insert("source".to_string(), serde_json::Value::String(source_id.to_string()));
         params.insert("target".to_string(), serde_json::Value::String(target_id.to_string()));
 
-        let result = self.execute_query(&query, &params).await?;
+        let _result = self.execute_query(&query, &params).await?;
         
         // Parse result (placeholder)
         Ok(vec![])
@@ -179,7 +179,7 @@ impl GraphStoreBase for Neo4jStore {
         let mut params = HashMap::new();
         params.insert("id".to_string(), serde_json::Value::String(node_id.to_string()));
 
-        let result = self.execute_query(query, &params).await?;
+        let _result = self.execute_query(query, &params).await?;
         
         // Parse result (placeholder)
         Ok(vec![])
@@ -206,7 +206,7 @@ impl GraphStoreBase for Neo4jStore {
         let query = format!("MATCH (n:{}) RETURN n, labels(n) as labels", label);
         let params = HashMap::new();
 
-        let result = self.execute_query(&query, &params).await?;
+        let _result = self.execute_query(&query, &params).await?;
         
         // Parse result (placeholder)
         Ok(vec![])
@@ -222,7 +222,7 @@ impl GraphStoreBase for Neo4jStore {
         let query = "MATCH (n) RETURN count(n) as count";
         let params = HashMap::new();
 
-        let result = self.execute_query(query, &params).await?;
+        let _result = self.execute_query(query, &params).await?;
         
         // Parse result (placeholder)
         Ok(0)
@@ -233,7 +233,7 @@ impl GraphStoreBase for Neo4jStore {
         let query = "MATCH ()-[r]->() RETURN count(r) as count";
         let params = HashMap::new();
 
-        let result = self.execute_query(query, &params).await?;
+        let _result = self.execute_query(query, &params).await?;
         
         // Parse result (placeholder)
         Ok(0)

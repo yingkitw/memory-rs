@@ -9,6 +9,7 @@ memory-rs provides a high-performance, type-safe memory layer for AI systems, en
 
 ## ✨ Features
 
+- **MCP Server**: Model Context Protocol server for AI assistant integration
 - **Multi-Level Memory**: User, Session, and Agent state management
 - **Semantic Search**: In-memory vector store for intelligent memory retrieval
 - **Local Embeddings**: SHA256-based hash embeddings (no external dependencies)
@@ -110,8 +111,12 @@ src/
 ├── graph/              # Graph memory
 │   ├── mod.rs          # GraphStoreBase trait
 │   └── neo4j.rs        # Neo4j implementation
-└── filtering/          # Advanced filtering
-    └── mod.rs          # Filter DSL and queries
+├── filtering/          # Advanced filtering
+│   └── mod.rs          # Filter DSL and queries
+├── mcp/                # MCP server
+│   └── mod.rs          # MCP tools and server
+└── bin/
+    └── mcp_server.rs   # MCP server binary
 ```
 
 ## 🧪 Testing
@@ -125,6 +130,62 @@ cargo test -- --nocapture
 
 # Run ignored tests (requires Qdrant)
 cargo test -- --ignored
+```
+
+## 🖥️ CLI
+
+The CLI provides command-line access to memory operations:
+
+```bash
+# Add a memory
+cargo run --bin memory-cli -- add --user alice --content "I prefer dark mode" --memory-type preference
+
+# Search memories
+cargo run --bin memory-cli -- search --user alice --query "dark mode" --limit 5
+
+# List all memories
+cargo run --bin memory-cli -- list --user alice
+
+# Export memories to JSON
+cargo run --bin memory-cli -- export --user alice --output memories.json
+
+# Import memories from JSON
+cargo run --bin memory-cli -- import --user alice --input memories.json
+
+# Show statistics
+cargo run --bin memory-cli -- stats --user alice
+```
+
+## 🤖 MCP Server
+
+Run the MCP server for AI assistant integration:
+
+```bash
+cargo run --bin memory-mcp
+```
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `add_memory` | Add a new memory for a user |
+| `search_memory` | Search memories using semantic similarity |
+| `update_memory` | Update an existing memory |
+| `delete_memory` | Delete a memory by ID |
+| `get_all_memories` | Retrieve all memories for a user |
+
+### Claude Desktop Configuration
+
+Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "memory": {
+      "command": "/path/to/memory-rs/target/release/memory-mcp"
+    }
+  }
+}
 ```
 
 ## 📖 Examples
@@ -190,5 +251,7 @@ Apache 2.0 - See [LICENSE](LICENSE) file
 
 ## 🔗 Related
 
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [rmcp](https://github.com/modelcontextprotocol/rust-sdk) - Rust MCP SDK
 - [Qdrant](https://qdrant.tech/)
 - [Watsonx](https://www.ibm.com/watsonx)

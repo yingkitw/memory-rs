@@ -138,23 +138,34 @@ impl VectorStoreBase for InMemoryStore {
             .map(|c| c.len())
             .unwrap_or(0))
     }
+
+    async fn get_by_id(
+        &self,
+        collection_name: &str,
+        id: &str,
+    ) -> Result<Option<VectorMetadata>> {
+        let collections = self.collections.read().await;
+        Ok(collections
+            .get(collection_name)
+            .and_then(|c| c.get(id))
+            .map(|entry| entry.metadata.clone()))
+    }
+
+    async fn get_all(
+        &self,
+        collection_name: &str,
+    ) -> Result<Vec<VectorMetadata>> {
+        let collections = self.collections.read().await;
+        Ok(collections
+            .get(collection_name)
+            .map(|c| c.values().map(|e| e.metadata.clone()).collect())
+            .unwrap_or_default())
+    }
 }
 
 /// Compute cosine similarity between two vectors
 fn cosine_similarity(a: &[f32], b: &[f32]) -> f32 {
-    if a.is_empty() || b.is_empty() || a.len() != b.len() {
-        return 0.0;
-    }
-
-    let dot_product: f32 = a.iter().zip(b.iter()).map(|(x, y)| x * y).sum();
-    let norm_a: f32 = a.iter().map(|x| x * x).sum::<f32>().sqrt();
-    let norm_b: f32 = b.iter().map(|x| x * x).sum::<f32>().sqrt();
-
-    if norm_a == 0.0 || norm_b == 0.0 {
-        return 0.0;
-    }
-
-    dot_product / (norm_a * norm_b)
+    crate::utils::cosine_similarity(a, b)
 }
 
 #[cfg(test)]
